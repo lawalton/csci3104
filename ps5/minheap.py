@@ -21,11 +21,11 @@ class minHeap:
             return 0
         return int(math.floor(i/2))
 
-    def decreaseKey(self, i, key):
-        if (key < self.A[i][0]):
+    def decreaseKey(self, i, node):
+        if (node.freq < self.A[i].freq):
             return None
-        self.A[i][0] = key
-        while(i > 0 and (self.A[self.parent(i)][0] > self.A[i][0])):
+        self.A[i] = node
+        while(i > 0 and (self.A[self.parent(i)].freq > self.A[i].freq)):
             swap(self.A, i, self.parent(i))
             i = self.parent(i)
         return 0
@@ -33,19 +33,19 @@ class minHeap:
     def minHeapify(self, i):
         l = self.left(i)
         r = self.right(i)
-        if (l <= (len(self.A)-1) and self.A[l] < self.A[i]):
+        if (l <= (len(self.A)-1) and self.A[l].freq < self.A[i].freq):
             smallest = l
         else:
             smallest = i
-        if (r <= (len(self.A)-1) and self.A[r] < self.A[0]):
+        if (r <= (len(self.A)-1) and self.A[r].freq < self.A[0].freq):
             smallest = r
         if (smallest != i):
             swap(self.A, 0, smallest)
             self.minHeapify(smallest)
 
-    def insert(self, key, node):
-        self.A.append([-1, node])
-        self.decreaseKey(len(self.A)-1,key)
+    def insert(self, node):
+        self.A.append(node)
+        self.decreaseKey(len(self.A)-1, node)
 
     # Return min value in heap
     def getMin(self):

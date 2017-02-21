@@ -1,7 +1,7 @@
 import random
 import quicksort as qs
-from huffmanTree import huffmanNode
 from minheap import minHeap
+from codeDictionary import dictionaryNode
 
 def removeDuplicates(S, f):
     A = ''
@@ -36,20 +36,25 @@ def huffmanEncode(S,f):
     # Create empty H which is a min heap
     H = minHeap()
     n = len(f)
+    T = []
     for i in range(0, n):
-        newNode = huffmanNode(S[i])
-        H.insert(f[i], newNode)
-    root = None
-    S = list(S)
-    for k in range(n+1, 2*n):
-        f.append(-1)
+        # Children nodes is an array of indecies in S that are children of a given node
+        newNode = dictionaryNode(i, f[i], [])
+        T.append(newNode)
+        H.insert(newNode)
+    for k in range(n+1,2*n):
         i = H.deleteMin()
         j = H.deleteMin()
-        f[k-1] = f[i[0]] + f[j[0]]
-        S.append(i[1].key() + j[1].key())
-        root = huffmanNode(S[k-1], i[1], j[1])
-        H.insert(f[k-1], root)
-    return root
+        i.addToCode('0')
+        j.addToCode('1')
+        newNodeChildren = [i, j]
+        newNodeChildren.extend(i.children)
+        newNodeChildren.extend(j.children)
+        newNode = dictionaryNode(k, j.freq + i.freq, newNodeChildren)
+        H.insert(newNode)
+        # Add to minheap
+    return T
+
 
 # x is the string to encode, T is the root node of the huffmanTree
 def encodeString(x,T):
@@ -58,4 +63,3 @@ def encodeString(x,T):
 x = 'hereisateststring'
 S, f = string2freq(x)
 y = huffmanEncode(S,f)
-# Y should be the pointer to the root node of the dictionary
