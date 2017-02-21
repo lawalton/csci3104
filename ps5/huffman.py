@@ -36,11 +36,11 @@ def huffmanEncode(S,f):
     # Create empty H which is a min heap
     H = minHeap()
     n = len(f)
-    T = []
+    leafs = []
     for i in range(0, n):
         # Children nodes is an array of indecies in S that are children of a given node
         newNode = dictionaryNode(i, f[i], [])
-        T.append(newNode)
+        leafs.append(newNode)
         H.insert(newNode)
     for k in range(n+1,2*n):
         i = H.deleteMin()
@@ -53,6 +53,9 @@ def huffmanEncode(S,f):
         newNode = dictionaryNode(k, j.freq + i.freq, newNodeChildren)
         H.insert(newNode)
         # Add to minheap
+    T = []
+    for i in range(0, len(leafs)):
+        T.append([S[leafs[i].index], leafs[i].encoding])
     return T
 
 
